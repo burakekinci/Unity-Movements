@@ -6,6 +6,7 @@ public class PlayerLocomotion : MonoBehaviour
 {
     InputManager inputManager;
 
+    [SerializeField] Vector3 targetDirection;
     Vector3 moveDirection;
     Transform cameraObject;
     Rigidbody playerRigidbody;
@@ -49,7 +50,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     private void HandleRotation()
     {
-        Vector3 targetDirection = Vector3.zero;
+        targetDirection = Vector3.zero;
         
         targetDirection = cameraObject.forward * inputManager.verticalInput;
         targetDirection = targetDirection + cameraObject.right * inputManager.horizontalInput;
