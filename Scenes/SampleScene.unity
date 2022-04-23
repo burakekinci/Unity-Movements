@@ -670,7 +670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetDirection: {x: 0, y: 0, z: 0}
   walkingSpeed: 1
-  runningSpeed: 2
+  runningSpeed: 1.2
   sprintingSpeed: 10
   isSprinting: 0
   isWalking: 0
