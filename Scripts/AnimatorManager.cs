@@ -21,37 +21,36 @@ public class AnimatorManager : MonoBehaviour
         float snappedHorizontal;
         float snappedVertical;
 
+        float lastHorizontal = 0;
+        float lastVertical = 0;
+
         #region Snapped Horizontal
-        if(horizontalMovement > 0 && horizontalMovement < 0.55f)
+        if(horizontalMovement > 0.2f && !isSprinting && horizontalMovement <  1.1f)
         {
             snappedHorizontal = 0.5f;
-        }else if ( horizontalMovement > 0.55f)
-        {
-            snappedHorizontal = 1f;
-        }else if(horizontalMovement< 0 && horizontalMovement > -0.55f)
+        }else if(horizontalMovement< -0.2f && !isSprinting && horizontalMovement > -1.1f)
         {
             snappedHorizontal = -0.5f;
-        }else if (horizontalMovement < -0.55f)
-        {
-            snappedHorizontal = -0.1f;
-        }else{
+        }else if(horizontalMovement == 0){
+            snappedHorizontal = 0;
+        }
+        else{
             snappedHorizontal = 0;
         }
         #endregion
+        
         #region Snapped Vertical
-        if(verticalMovement > 0 && verticalMovement < 0.55f)
+        if(verticalMovement > 0.2f && !isSprinting &&  verticalMovement < 1.1f)
         {
             snappedVertical = 0.5f;
-        }else if ( verticalMovement > 0.55f)
-        {
-            snappedVertical = 1f;
-        }else if(verticalMovement< 0 && verticalMovement > -0.55f)
+        }else if(verticalMovement< -0.2f && !isSprinting &&  verticalMovement > -1.1f)
         {
             snappedVertical = -0.5f;
-        }else if (verticalMovement < -0.55f)
+        }else if(verticalMovement == 0)
         {
-            snappedVertical = -0.1f;
-        }else{
+            snappedVertical = 0;
+        }
+        else{
             snappedVertical = 0;
         }
         #endregion
@@ -67,9 +66,14 @@ public class AnimatorManager : MonoBehaviour
             snappedVertical = 0.5f;
             snappedHorizontal = horizontalMovement;
         }
-
-        animator.SetFloat(horizontal,snappedHorizontal,0.1f,Time.deltaTime);
-        animator.SetFloat(vertical,snappedVertical,0.1f,Time.deltaTime);
+        
+    
+        lastVertical = verticalMovement;
+        lastHorizontal = horizontalMovement;
+        animator.SetFloat(horizontal,horizontalMovement,0.15f,Time.deltaTime);
+        animator.SetFloat(vertical,verticalMovement,0.15f,Time.deltaTime);
+    
+        
     }
 
 

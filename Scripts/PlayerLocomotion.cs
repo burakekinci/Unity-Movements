@@ -17,7 +17,7 @@ public class PlayerLocomotion : MonoBehaviour
     public bool isSprinting;
     public bool isWalking;
     public float rotationSpeed = 15;
-
+    
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
@@ -28,7 +28,7 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleAllMovement()
     {
         HandleMovement();
-        HandleRotation();
+        //HandleRotation();
     }
 
     private void HandleMovement()

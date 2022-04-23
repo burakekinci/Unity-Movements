@@ -59,7 +59,7 @@ public class InputManager : MonoBehaviour
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
-        animatorManager.UpdateAnimatorValues(0,moveAmount,playerLocomotion.isSprinting,playerLocomotion.isWalking);
+        animatorManager.UpdateAnimatorValues(horizontalInput,verticalInput,playerLocomotion.isSprinting,playerLocomotion.isWalking);
 
     }
 
