@@ -8,6 +8,8 @@ public class AnimatorManager : MonoBehaviour
     int horizontal;
     int vertical;
 
+    private Vector3 moveDirection = Vector3.zero;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -68,10 +70,24 @@ public class AnimatorManager : MonoBehaviour
         }
         
     
+
+
         lastVertical = verticalMovement;
         lastHorizontal = horizontalMovement;
-        animator.SetFloat(horizontal,horizontalMovement,0.15f,Time.deltaTime);
-        animator.SetFloat(vertical,verticalMovement,0.15f,Time.deltaTime);
+
+        
+        moveDirection = new Vector3(horizontalMovement,0,verticalMovement);
+
+        if (moveDirection.magnitude > 1.0f)
+        {
+            moveDirection = moveDirection.normalized;
+        }
+
+        //Animation relative to face direction calculating
+        moveDirection = transform.InverseTransformDirection(moveDirection);
+
+        animator.SetFloat(horizontal,moveDirection.x,0.15f,Time.deltaTime);
+        animator.SetFloat(vertical,moveDirection.z,0.15f,Time.deltaTime);
     
         
     }

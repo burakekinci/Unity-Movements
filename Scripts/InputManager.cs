@@ -8,14 +8,22 @@ public class InputManager : MonoBehaviour
     PlayerLocomotion playerLocomotion;
     AnimatorManager animatorManager;
 
-    public Vector2 movementInput;
+    [SerializeField] private Vector2 movementInput;
+    [SerializeField] private Vector2 mousePosition;
     public float verticalInput;
     public float horizontalInput;
+
 
     public float moveAmount;
 
     public bool sprint_Input;
     public bool walk_Input;
+
+
+    public Vector2 MousePosition
+    {
+        get { return mousePosition;} //- new Vector2(Screen.width/2,Screen.height/2); }
+    }
 
     private void Awake()
     {
@@ -28,8 +36,13 @@ public class InputManager : MonoBehaviour
         if(playerControls == null)
         {
             playerControls = new PlayerControls();
+            
+            //read movement input values(WASD-LeftStick)
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>(); 
 
+            //read rotation input values(MouseDirection-RightStick)
+            playerControls.PlayerMovement.MousePosition.performed += i => mousePosition = i.ReadValue<Vector2>();
+            
             playerControls.PlayerActions.Run.performed += i => sprint_Input = true;
             playerControls.PlayerActions.Run.canceled += i => sprint_Input = false;
 
@@ -52,6 +65,7 @@ public class InputManager : MonoBehaviour
         HandleMovementInput();
         HandleSprintingInput();
         HandleWalkingInput();
+        HandleRotationInput();
     }
 
     private void HandleMovementInput()
@@ -61,6 +75,11 @@ public class InputManager : MonoBehaviour
         moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
         animatorManager.UpdateAnimatorValues(horizontalInput,verticalInput,playerLocomotion.isSprinting,playerLocomotion.isWalking);
 
+    }
+
+    private void HandleRotationInput()
+    {
+        
     }
 
     private void HandleSprintingInput()

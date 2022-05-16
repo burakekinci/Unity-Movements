@@ -28,28 +28,76 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleAllMovement()
     {
         HandleMovement();
-        //HandleRotation();
+        HandleRotation();
     }
 
     private void HandleMovement()
     {
-        moveDirection = cameraObject.forward * inputManager.verticalInput;
-        moveDirection = moveDirection + cameraObject.right * inputManager.horizontalInput;
+        Vector3 cameraRight = cameraObject.right;
+        cameraRight.y=0;
+        cameraRight = cameraRight.normalized;
+
+        Vector3 cameraForward = cameraObject.forward;
+        cameraForward.y=0;
+        cameraForward = cameraForward.normalized;
+
+        
+
+        moveDirection = cameraRight * inputManager.horizontalInput;
+        moveDirection = moveDirection + cameraForward * inputManager.verticalInput;
         moveDirection.Normalize();
         moveDirection.y = 0;
+        //Debug.Log(moveDirection);
 
-        if(isSprinting)
+        /*if(isSprinting)
             moveDirection = moveDirection * sprintingSpeed;
         else if(isWalking)
             moveDirection = moveDirection * walkingSpeed;
         else
             moveDirection = moveDirection * runningSpeed;    
-        Vector3 movementVelocity = moveDirection;
+        */
+        Vector3 movementVelocity = moveDirection * runningSpeed;
+        //Debug.Log(moveDirection);
         playerRigidbody.velocity = movementVelocity; 
     }
-
+    public Vector3 worldPos;
     private void HandleRotation()
     {
+        Vector2 mousePos = inputManager.MousePosition;
+        float angle = Vector2.SignedAngle(mousePos.normalized,Vector2.up);
+
+        //worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+        
+        //Vector2 dir = mousePos.normalized - Vector2.up;
+        //Debug.Log(" angle" + mousePos);
+
+        //create a ray from the mouse cursor on screen in the direction of the camera
+        Ray camRay = Camera.main.ScreenPointToRay(mousePos);
+        Debug.DrawRay(camRay.origin,camRay.direction,Color.yellow);
+            
+        // Create a RaycastHit variable to store information about what was hit by the ray.
+        RaycastHit floorHit;
+        
+        
+        // Perform the raycast and if it hits something on the layerMask
+        if(Physics.Raycast(camRay, out floorHit,Mathf.Infinity))
+        {
+            
+            // Create a vector from the player to the point on the floor the raycast from the mouse hit.
+            Vector3 playerToMouse = floorHit.point - transform.position;
+
+            // Ensure the vector is entirely along the floor plane.
+            playerToMouse.y = 0f;
+
+            // Create a quaternion (rotation) based on looking down the vector from the player to the mouse.
+            Quaternion newRotation = Quaternion.LookRotation(playerToMouse);
+ 
+            // Set the player's rotation to this new rotation.
+            playerRigidbody.MoveRotation(newRotation);
+
+        }
+
+        /*
         targetDirection = Vector3.zero;
         
         targetDirection = cameraObject.forward * inputManager.verticalInput;
@@ -65,5 +113,9 @@ public class PlayerLocomotion : MonoBehaviour
         Quaternion playerRotation = Quaternion.Slerp(transform.rotation,targetRotation,rotationSpeed * Time.deltaTime);
     
         transform.rotation = playerRotation;
+        */
+    }
+    void OnDrawGizmos() {
+            Gizmos.DrawSphere(new Vector3(worldPos.x,0,worldPos.y),0.2f);    
     }
 }
